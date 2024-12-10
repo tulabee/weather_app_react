@@ -87,7 +87,7 @@ export default function Weather() {
           </a>{" "}
           and is{" "}
           <a
-            href="https://github.com/shecodesio/weather"
+            href="https://github.com/tulabee/weather_app_react"
             target="_blank"
             rel="noopener noreferrer"
           >
