@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
-import axios from "axios";
 import "./Weather.css";
 
 export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
+
+  const search = useCallback(() => {
+    const apiKey = "03be6a41bd339e2todfcdef02916a71b";
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+
+    axios
+      .get(apiUrl)
+      .then(handleResponse)
+      .catch((error) => {
+        console.error("Error fetching weather data: ", error);
+      });
+  }, [city]);
+
+  useEffect(() => {
+    search();
+  }, [search]);
 
   function handleResponse(response) {
     setWeatherData({
@@ -31,12 +47,6 @@ export default function Weather(props) {
     setCity(event.target.value);
   }
 
-  function search() {
-    const apiKey = "03be6a41bd339e2todfcdef02916a71b";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse);
-  }
-
   if (weatherData.ready) {
     return (
       <div className="Weather">
@@ -45,11 +55,11 @@ export default function Weather(props) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img src="/images/logo.png" className="logo" alt="SheCodes Logo" />
+      
         </a>
         <form onSubmit={handleSubmit}>
           <div className="row">
-            <div className="col-9 ">
+            <div className="col-9">
               <input
                 type="search"
                 placeholder="Enter a city.."
@@ -82,7 +92,7 @@ export default function Weather(props) {
           </a>{" "}
           and is{" "}
           <a
-            href="https://ghttps://github.com/tulabee/weather_app_react"
+            href="https://github.com/tulabee/weather_app_react"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -100,7 +110,6 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    search();
     return "Loading...";
   }
 }
