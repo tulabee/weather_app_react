@@ -7,6 +7,7 @@ import "./Weather.css";
 export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
+  const [tempCity, setTempCity] = useState(props.defaultCity); // Added tempCity state
 
   const search = useCallback(() => {
     const apiKey = "03be6a41bd339e2todfcdef02916a71b";
@@ -40,23 +41,17 @@ export default function Weather(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    search();
+    setCity(tempCity);
   }
 
-  function handleCityChange(event) {
-    setCity(event.target.value);
+  function handleTempCityChange(event) {
+    // Updated function name to avoid conflict
+    setTempCity(event.target.value);
   }
 
   if (weatherData.ready) {
     return (
       <div className="Weather">
-        <a
-          href="https://www.shecodes.io/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-      
-        </a>
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-9">
@@ -64,7 +59,8 @@ export default function Weather(props) {
                 type="search"
                 placeholder="Enter a city.."
                 className="form-control search-input"
-                onChange={handleCityChange}
+                onChange={handleTempCityChange} // Updated input change handler to new function
+                value={tempCity}
               />
             </div>
             <div className="col-3 p-0">
